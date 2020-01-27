@@ -5,4 +5,9 @@ const postNoteSchema = JOI.object().keys({
   description: JOI.string().required(),
 });
 
-module.exports = postNoteSchema;
+const updateNoteSchema = JOI.object().keys({
+  title: JOI.string().required(),
+  description: JOI.string().required(),
+});
+
+module.exports = { postNoteSchema, updateNoteSchema };

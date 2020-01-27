@@ -6,16 +6,38 @@ const getNotesHandler = async (request, h) => {
   return h.response(notesData);
 };
 const postNotesHandler = async (request, h) => {
-  const prevNotes = await jsonOperations.readJSON();
+  const notesJSON = await jsonOperations.readJSON();
   const note = request.payload;
 
   note.id = uuid();
   note.isActive = true;
-  prevNotes.notes.push(note);
+  notesJSON.notes.push(note);
 
-  jsonOperations.writeJSON(JSON.stringify(prevNotes));
+  jsonOperations.writeJSON(JSON.stringify(notesJSON));
 
   return h.response('New Notes added');
 };
 
-module.exports = { getNotesHandler, postNotesHandler };
+const updateNotesHandler = async (request, h) => {
+  try {
+    const notesData = await jsonOperations.readJSON();
+    const noteId = request.params.id;
+    const newNote = request.payload;
+    newNote.id = noteId;
+    newNote.isActive = true;
+    let id = 0;
+    notesData.notes.forEach((element) => {
+      if (element.id == noteId) {
+        notesData.notes[id] = newNote;
+        return;
+      }
+      id += 1;
+    });
+    jsonOperations.writeJSON(JSON.stringify(notesData));
+    return h.response(`Notes with id=${noteId} updated`);
+  } catch (err) {
+    return h.response(err.message);
+  }
+};
+
+module.exports = { getNotesHandler, postNotesHandler, updateNotesHandler };

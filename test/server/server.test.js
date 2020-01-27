@@ -35,4 +35,17 @@ describe('the server function', () => {
     const response = await server.inject(getNotesObj);
     expect(response.statusCode).toBe(200);
   });
+
+  it('should obtain 200 success code when put is called with correct url', async () => {
+    const getNotesObj = {
+      method: 'PUT',
+      url: '/notes/1',
+      payload: {
+        title: 'new note',
+        description: 'describe new note',
+      },
+    };
+    const response = await server.inject(getNotesObj);
+    expect(response.statusCode).toBe(200);
+  });
 });
