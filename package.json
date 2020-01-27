@@ -22,5 +22,8 @@
     "eslint-plugin-import": "^2.20.0",
     "jest": "^25.1.0"
   },
-  "dependencies": {}
+  "dependencies": {
+    "@hapi/hapi": "^19.0.5",
+    "promise-fs": "^2.1.1"
+  }
 }

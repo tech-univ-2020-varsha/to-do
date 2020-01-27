@@ -1,0 +1,16 @@
+{
+    "notes": [
+        {
+            "id": 1,
+            "title": "maths",
+            "description": "maths is an intresting subject",
+            "isActive": true
+        },
+        {
+            "id": 2,
+            "title": "js",
+            "description": "js is weird",
+            "isActive": true
+        }
+    ]
+}

@@ -1,0 +1,25 @@
+let { server } = require('../../server');
+
+
+const init = async () => {
+  await server.initialize();
+  return server;
+};
+
+describe('the server function', () => {
+  beforeEach(async () => {
+    server = await init();
+  });
+  afterEach(async () => {
+    await server.stop();
+  });
+
+  it('should obtain 200 success code for route "notes" with GET method', async () => {
+    const getNotesObj = {
+      method: 'GET',
+      url: '/notes',
+    };
+    const response = await server.inject(getNotesObj);
+    expect(response.statusCode).toBe(200);
+  });
+});
