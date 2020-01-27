@@ -27,7 +27,7 @@ const updateNotesHandler = async (request, h) => {
     newNote.isActive = true;
     let id = 0;
     notesData.notes.forEach((element) => {
-      if (element.id == noteId) {
+      if (element.id === noteId) {
         notesData.notes[id] = newNote;
         return;
       }
@@ -44,7 +44,7 @@ const deleteNotesHandler = async (request, h) => {
   try {
     const notesData = await jsonOperations.readJSON();
     const { id } = request.params;
-    notesData.notes = notesData.notes.filter((note) => note.id != id);
+    notesData.notes = notesData.notes.filter((note) => note.id !== id);
     jsonOperations.writeJSON(JSON.stringify(notesData));
     return h.response(`Deleted note with id=${id}`);
   } catch (err) {

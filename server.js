@@ -1,7 +1,7 @@
 const hapi = require('@hapi/hapi');
 const Joi = require('@hapi/joi');
-const todoRoutes = require('./routes/todoRoutes');
-const quoteRoutes = require('./routes/quoteRoutes');
+const todoRoutes = require('./src/routes/todoRoutes');
+const quoteRoutes = require('./src/routes/quoteRoutes');
 
 const server = hapi.Server({
   host: 'localhost',

@@ -1,5 +1,5 @@
 const fs = require('promise-fs');
-const { readJSON, writeJSON } = require('../../utils/fileOperations');
+const { readJSON, writeJSON } = require('../../src/utils/fileOperations');
 
 describe('the readJSON function', () => {
   it('should call the readFile function', async () => {

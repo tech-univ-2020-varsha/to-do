@@ -1,5 +1,5 @@
 const axios = require('axios');
-const { getQuotesHandler } = require('../../handler/quotesHandler');
+const { getQuotesHandler } = require('../../src/handler/quotesHandler');
 
 describe('the quotes handler function', () => {
   it('should call the axios.get() method using specific url', async (done) => {

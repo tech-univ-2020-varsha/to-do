@@ -1,4 +1,4 @@
-let { server } = require('../../server');
+let { server } = require('../server');
 
 
 const init = async () => {

@@ -1,7 +1,7 @@
-const jsonOperations = require('../../utils/fileOperations');
+const jsonOperations = require('../../src/utils/fileOperations');
 const {
   getNotesHandler, postNotesHandler, updateNotesHandler, deleteNotesHandler,
-} = require('../../handler/todoHandler');
+} = require('../../src/handler/todoHandler');
 
 describe('the get handler function', () => {
   it('should call readJSON when we request route /notes with GET method', async (done) => {
