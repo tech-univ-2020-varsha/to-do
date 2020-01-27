@@ -44,7 +44,6 @@ const deleteNotesHandler = async (request, h) => {
   try {
     const notesData = await jsonOperations.readJSON();
     const { id } = request.params;
-    console.log(id);
     notesData.notes = notesData.notes.filter((note) => note.id != id);
     jsonOperations.writeJSON(JSON.stringify(notesData));
     return h.response(`Deleted note with id=${id}`);

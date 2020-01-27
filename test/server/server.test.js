@@ -61,4 +61,14 @@ describe('the server function', () => {
     const response = await server.inject(getNotesObj);
     expect(response.statusCode).toBe(200);
   });
+
+
+  it('should obtain 200 success code for route "quotes" with GET method', async () => {
+    const getNotesObj = {
+      method: 'GET',
+      url: '/quotes',
+    };
+    const response = await server.inject(getNotesObj);
+    expect(response.statusCode).toBe(200);
+  });
 });
