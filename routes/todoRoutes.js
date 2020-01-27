@@ -1,5 +1,7 @@
-const { getNotesHandler, postNotesHandler, updateNotesHandler } = require('../handler/todoHandler');
-const { postNoteSchema, updateNoteSchema } = require('../schemas/todoSchema');
+const {
+  getNotesHandler, postNotesHandler, updateNotesHandler, deleteNotesHandler,
+} = require('../handler/todoHandler');
+const { postNoteSchema, updateNoteSchema, deleteNoteSchema } = require('../schemas/todoSchema');
 
 const todoRoutes = [
   {
@@ -22,6 +24,16 @@ const todoRoutes = [
       handler: updateNotesHandler,
       validate: {
         payload: updateNoteSchema,
+      },
+    },
+  },
+  {
+    path: '/notes/{id}',
+    method: 'DELETE',
+    config: {
+      handler: deleteNotesHandler,
+      validate: {
+        params: deleteNoteSchema,
       },
     },
   },

@@ -10,4 +10,7 @@ const updateNoteSchema = JOI.object().keys({
   description: JOI.string().required(),
 });
 
-module.exports = { postNoteSchema, updateNoteSchema };
+const deleteNoteSchema = JOI.object({
+  id: JOI.string().guid().required(),
+});
+module.exports = { postNoteSchema, updateNoteSchema, deleteNoteSchema };

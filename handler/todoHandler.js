@@ -40,4 +40,19 @@ const updateNotesHandler = async (request, h) => {
   }
 };
 
-module.exports = { getNotesHandler, postNotesHandler, updateNotesHandler };
+const deleteNotesHandler = async (request, h) => {
+  try {
+    const notesData = await jsonOperations.readJSON();
+    const { id } = request.params;
+    console.log(id);
+    notesData.notes = notesData.notes.filter((note) => note.id != id);
+    jsonOperations.writeJSON(JSON.stringify(notesData));
+    return h.response(`Deleted note with id=${id}`);
+  } catch (err) {
+    return h.response(err.message);
+  }
+};
+
+module.exports = {
+  getNotesHandler, postNotesHandler, updateNotesHandler, deleteNotesHandler,
+};
