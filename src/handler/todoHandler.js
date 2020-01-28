@@ -2,20 +2,28 @@ const uuid = require('uuid');
 const jsonOperations = require('../utils/fileOperations');
 
 const getNotesHandler = async (request, h) => {
-  const notesData = await jsonOperations.readJSON();
-  return h.response(notesData);
+  try {
+    const notesData = await jsonOperations.readJSON();
+    return h.response(notesData).code(200);
+  } catch (err) {
+    return h.response(err.message).code(500);
+  }
 };
 const postNotesHandler = async (request, h) => {
-  const notesJSON = await jsonOperations.readJSON();
-  const note = request.payload;
+  try {
+    const notesJSON = await jsonOperations.readJSON();
+    const note = request.payload;
 
-  note.id = uuid();
-  note.isActive = true;
-  notesJSON.notes.push(note);
+    note.id = uuid();
+    note.isActive = true;
+    notesJSON.notes.push(note);
 
-  jsonOperations.writeJSON(JSON.stringify(notesJSON));
+    await jsonOperations.writeJSON(JSON.stringify(notesJSON));
 
-  return h.response('New Notes added');
+    return h.response('New Notes added').code(200);
+  } catch (err) {
+    return h.response(err.message).code(500);
+  }
 };
 
 const updateNotesHandler = async (request, h) => {
@@ -26,17 +34,23 @@ const updateNotesHandler = async (request, h) => {
     newNote.id = noteId;
     newNote.isActive = true;
     let id = 0;
+    let isPresent = false;
     notesData.notes.forEach((element) => {
       if (element.id === noteId) {
+        isPresent = true;
         notesData.notes[id] = newNote;
         return;
       }
+
       id += 1;
     });
-    jsonOperations.writeJSON(JSON.stringify(notesData));
-    return h.response(`Notes with id=${noteId} updated`);
+    if (!isPresent) {
+      notesData.notes.push(newNote);
+    }
+    await jsonOperations.writeJSON(JSON.stringify(notesData));
+    return h.response(`Notes with id=${noteId} updated`).code(200);
   } catch (err) {
-    return h.response(err.message);
+    return h.response(err.message).code(500);
   }
 };
 
@@ -44,11 +58,16 @@ const deleteNotesHandler = async (request, h) => {
   try {
     const notesData = await jsonOperations.readJSON();
     const { id } = request.params;
+    const notesLen = notesData.notes.length;
     notesData.notes = notesData.notes.filter((note) => note.id !== id);
-    jsonOperations.writeJSON(JSON.stringify(notesData));
-    return h.response(`Deleted note with id=${id}`);
+    const newNotesLen = notesData.notes.length;
+    if (notesLen === newNotesLen) {
+      return h.response(`${id} not found`).code(204);
+    }
+    await jsonOperations.writeJSON(JSON.stringify(notesData));
+    return h.response(`Deleted note with id=${id}`).code(200);
   } catch (err) {
-    return h.response(err.message);
+    return h.response(err.message).code(500);
   }
 };
 
