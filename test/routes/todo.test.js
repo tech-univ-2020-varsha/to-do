@@ -1,5 +1,5 @@
 let { server } = require('../../server');
-const jsonOperations = require('../../src/utils/fileOperations');
+const dbOperations = require('../../src/utils/dbOperations');
 
 
 const init = async () => {
@@ -16,16 +16,15 @@ describe('the server function', () => {
   });
 
   it('should obtain 200 success code for route "notes" with GET method', async () => {
-    const mockReadJSON = jest.spyOn(jsonOperations, 'readJSON');
+    const mockReadJSON = jest.spyOn(dbOperations, 'readDB');
     const mockJsonResponse = {
-      notes: [
-        {
-          title: 'ANDROID',
-          description: 'ANDROID is too slow',
-          id: '99961628-6e61-4d74-868f-c932d5730f3c',
-          isActive: true,
-        },
-      ],
+
+      title: 'ANDROID',
+      description: 'ANDROID is too slow',
+      id: '99961628-6e61-4d74-868f-c932d5730f3c',
+      isactive: true,
+
+
     };
     mockReadJSON.mockResolvedValue(mockJsonResponse);
     const getNotesObj = {
@@ -33,25 +32,14 @@ describe('the server function', () => {
       url: '/notes',
     };
     const response = await server.inject(getNotesObj);
-    expect(response.statusCode).toBe(200);
     expect(response.result).toBe(mockJsonResponse);
+    expect(response.statusCode).toBe(200);
+
     mockReadJSON.mockRestore();
   });
 
   it('should obtain 200 success code for route "notes" with POST method', async () => {
-    const mockReadJSON = jest.spyOn(jsonOperations, 'readJSON');
-    const mockJsonResponse = {
-      notes: [
-        {
-          title: 'ANDROID',
-          description: 'ANDROID is too slow',
-          id: '99961628-6e61-4d74-868f-c932d5730f3c',
-          isActive: true,
-        },
-      ],
-    };
-    mockReadJSON.mockResolvedValue(mockJsonResponse);
-    const mockWriteJSON = jest.spyOn(jsonOperations, 'writeJSON');
+    const mockWriteJSON = jest.spyOn(dbOperations, 'writeDB');
     mockWriteJSON.mockResolvedValue();
     const getNotesObj = {
       method: 'POST',
@@ -63,55 +51,27 @@ describe('the server function', () => {
     };
     const response = await server.inject(getNotesObj);
     expect(response.statusCode).toBe(200);
-    mockReadJSON.mockRestore();
+
     mockWriteJSON.mockRestore();
   });
 
 
   it('should obtain 200 success code when put is called with correct url', async () => {
-    const mockReadJSON = jest.spyOn(jsonOperations, 'readJSON');
-    const mockJsonResponse = {
-      notes: [
-        {
-          title: 'ANDROID',
-          description: 'ANDROID is too slow',
-          id: '99961628-6e61-4d74-868f-c932d5730f3c',
-          isActive: true,
-        },
-      ],
-    };
-    mockReadJSON.mockResolvedValue(mockJsonResponse);
-    const mockWriteJSON = jest.spyOn(jsonOperations, 'writeJSON');
-    mockWriteJSON.mockResolvedValue();
+    const mockUpdateDB = jest.spyOn(dbOperations, 'updateDB');
+    mockUpdateDB.mockResolvedValue();
     const getNotesObj = {
       method: 'PUT',
-      url: '/notes/1',
-      payload: {
-        title: 'new note',
-        description: 'describe new note',
-      },
+      url: '/notes/feeb34fd-c0b4-411e-b51f-1a11f0e905af',
     };
     const response = await server.inject(getNotesObj);
     expect(response.statusCode).toBe(200);
-    mockReadJSON.mockRestore();
-    mockWriteJSON.mockRestore();
+
+    mockUpdateDB.mockRestore();
   });
 
   it('should obtain 200 success code when delete is called with correct url', async () => {
-    const mockReadJSON = jest.spyOn(jsonOperations, 'readJSON');
-    const mockJsonResponse = {
-      notes: [
-        {
-          title: 'ANDROID',
-          description: 'ANDROID is too slow',
-          id: '99961628-6e61-4d74-868f-c932d5730f3c',
-          isActive: true,
-        },
-      ],
-    };
-    mockReadJSON.mockResolvedValue(mockJsonResponse);
-    const mockWriteJSON = jest.spyOn(jsonOperations, 'writeJSON');
-    mockWriteJSON.mockResolvedValue();
+    const mockDeleteNote = jest.spyOn(dbOperations, 'deleteNote');
+    mockDeleteNote.mockResolvedValue([], [1]);
     const getNotesObj = {
       method: 'DELETE',
       url: '/notes/99961628-6e61-4d74-868f-c932d5730f3c',
@@ -122,7 +82,7 @@ describe('the server function', () => {
     };
     const response = await server.inject(getNotesObj);
     expect(response.statusCode).toBe(200);
-    mockReadJSON.mockRestore();
-    mockWriteJSON.mockRestore();
+
+    mockDeleteNote.mockRestore();
   });
 });

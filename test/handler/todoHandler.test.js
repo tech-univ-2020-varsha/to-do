@@ -1,41 +1,48 @@
-const jsonOperations = require('../../src/utils/fileOperations');
 const {
-  getNotesHandler, postNotesHandler, updateNotesHandler, deleteNotesHandler,
+  getNotesHandler, postNotesHandler, changeStateHandler, deleteNotesHandler,
 } = require('../../src/handler/todoHandler');
+const dbOperations = require('../../src/utils/dbOperations');
 
 describe('the get handler function', () => {
-  it('should call h.response with the data from readJSON file for sucess case', async () => {
-    const mockReadJSON = jest.spyOn(jsonOperations, 'readJSON');
+  it('should call h.response with the data from notes db on sucess', async () => {
+    const mockReadJSON = jest.spyOn(dbOperations, 'readDB');
     const mockJsonResponse = {
-      notes: [
-        {
-          title: 'ANDROID',
-          description: 'ANDROID is too slow',
-          id: '99961628-6e61-4d74-868f-c932d5730f3c',
-          isActive: true,
-        },
-      ],
+      title: 'ANDROID',
+      description: 'ANDROID is too slow',
+      id: '99961628-6e61-4d74-868f-c932d5730f3c',
+      isActive: true,
+
     };
     mockReadJSON.mockResolvedValue(mockJsonResponse);
     const mockCode = jest.fn();
     const mockH = {
       response: jest.fn(() => ({ code: mockCode })),
     };
-    await getNotesHandler(null, mockH);
+    const mockRequest = {
+      server: {
+        sequelize: {},
+      },
+    };
+    await getNotesHandler(mockRequest, mockH);
     expect(mockH.response).toHaveBeenCalledWith(mockJsonResponse);
     expect(mockCode).toHaveBeenCalledWith(200);
     mockReadJSON.mockRestore();
   });
 
   it('should return 500 status code if file read operation fails', async () => {
-    const mockReadJSON = jest.spyOn(jsonOperations, 'readJSON');
+    const mockReadJSON = jest.spyOn(dbOperations, 'readDB');
 
     mockReadJSON.mockRejectedValue(new Error('Read file failed'));
     const mockCode = jest.fn();
     const mockH = {
       response: jest.fn(() => ({ code: mockCode })),
     };
-    await getNotesHandler(null, mockH);
+    const mockRequest = {
+      server: {
+        sequelize: {},
+      },
+    };
+    await getNotesHandler(mockRequest, mockH);
     expect(mockH.response).toHaveBeenCalledWith('Read file failed');
     expect(mockCode).toHaveBeenCalledWith(500);
     mockReadJSON.mockRestore();
@@ -49,6 +56,10 @@ describe('the post handler function', () => {
         title: 'new note',
         description: 'describe note',
       },
+      server:
+      {
+        sequelize: {},
+      },
     };
 
     const mockCode = jest.fn();
@@ -56,26 +67,15 @@ describe('the post handler function', () => {
       response: jest.fn(() => ({ code: mockCode })),
     };
 
-    const mockReadJSON = jest.spyOn(jsonOperations, 'readJSON');
-    const mockJsonResponse = {
-      notes: [
-        {
-          title: 'ANDROID',
-          description: 'ANDROID is too slow',
-          id: '99961628-6e61-4d74-868f-c932d5730f3c',
-          isActive: true,
-        },
-      ],
-    };
-    mockReadJSON.mockResolvedValue(mockJsonResponse);
-    const mockWriteJSON = jest.spyOn(jsonOperations, 'writeJSON');
-    mockWriteJSON.mockResolvedValue();
+
+    const mockWriteDB = jest.spyOn(dbOperations, 'writeDB');
+    mockWriteDB.mockResolvedValue();
     await postNotesHandler(mockRequest, mockH);
     expect(mockH.response).toHaveBeenCalledWith('New Notes added');
     expect(mockCode).toHaveBeenCalledWith(200);
     // expect(result).toBe(123);
-    mockWriteJSON.mockRestore();
-    mockReadJSON.mockRestore();
+    mockWriteDB.mockRestore();
+
     done();
   });
 
@@ -85,6 +85,10 @@ describe('the post handler function', () => {
         title: 'new note',
         description: 'describe note',
       },
+      server:
+      {
+        sequelize: {},
+      },
     };
 
     const mockCode = jest.fn();
@@ -92,39 +96,27 @@ describe('the post handler function', () => {
       response: jest.fn(() => ({ code: mockCode })),
     };
 
-    const mockReadJSON = jest.spyOn(jsonOperations, 'readJSON');
-    const mockJsonResponse = {
-      notes: [
-        {
-          title: 'ANDROID',
-          description: 'ANDROID is too slow',
-          id: '99961628-6e61-4d74-868f-c932d5730f3c',
-          isActive: true,
-        },
-      ],
-    };
-    mockReadJSON.mockResolvedValue(mockJsonResponse);
-    const mockWriteJSON = jest.spyOn(jsonOperations, 'writeJSON');
-    mockWriteJSON.mockRejectedValue(new Error('Failed to add new note'));
+
+    const mockInsertNote = jest.spyOn(dbOperations, 'writeDB');
+    mockInsertNote.mockRejectedValue(new Error('Failed to add new note'));
     await postNotesHandler(mockRequest, mockH);
     expect(mockH.response).toHaveBeenCalledWith('Failed to add new note');
     expect(mockCode).toHaveBeenCalledWith(500);
     // expect(result).toBe(123);
-    mockWriteJSON.mockRestore();
-    mockReadJSON.mockRestore();
+    mockInsertNote.mockRestore();
     done();
   });
 });
 
-describe('the put handler function', () => {
+describe('the change state handler function', () => {
   it('should call the h.response with success message when updating note succeeds', async () => {
     const mockRequest = {
       params: {
         id: '69bdeb20-596e-4abd-985b-82dff67696f6',
       },
-      payload: {
-        title: 'new note',
-        description: 'describe note',
+      server:
+      {
+        sequelize: {},
       },
     };
 
@@ -134,25 +126,13 @@ describe('the put handler function', () => {
         code: mockCode,
       })),
     };
-    const mockReadJSON = jest.spyOn(jsonOperations, 'readJSON');
-    const mockJsonResponse = {
-      notes: [
-        {
-          title: 'ANDROID',
-          description: 'ANDROID is too slow',
-          id: '99961628-6e61-4d74-868f-c932d5730f3c',
-          isActive: true,
-        },
-      ],
-    };
-    mockReadJSON.mockResolvedValue(mockJsonResponse);
-    const mockWriteJSON = jest.spyOn(jsonOperations, 'writeJSON');
-    mockWriteJSON.mockResolvedValue();
-    await updateNotesHandler(mockRequest, mockH);
+
+    const mockUpadetNote = jest.spyOn(dbOperations, 'updateDB');
+    mockUpadetNote.mockResolvedValue();
+    await changeStateHandler(mockRequest, mockH);
     expect(mockH.response).toHaveBeenCalledWith(`Notes with id=${mockRequest.params.id} updated`);
     expect(mockCode).toHaveBeenCalledWith(200);
-    mockWriteJSON.mockRestore();
-    mockReadJSON.mockRestore();
+    mockUpadetNote.mockRestore();
   });
 
   it('should call the h.response with error message when updating note fails', async () => {
@@ -164,6 +144,10 @@ describe('the put handler function', () => {
         title: 'new note',
         description: 'describe note',
       },
+      server:
+      {
+        sequelize: {},
+      },
     };
 
     const mockCode = jest.fn();
@@ -172,25 +156,13 @@ describe('the put handler function', () => {
         code: mockCode,
       })),
     };
-    const mockReadJSON = jest.spyOn(jsonOperations, 'readJSON');
-    const mockJsonResponse = {
-      notes: [
-        {
-          title: 'ANDROID',
-          description: 'ANDROID is too slow',
-          id: '99961628-6e61-4d74-868f-c932d5730f3c',
-          isActive: true,
-        },
-      ],
-    };
-    mockReadJSON.mockResolvedValue(mockJsonResponse);
-    const mockWriteJSON = jest.spyOn(jsonOperations, 'writeJSON');
-    mockWriteJSON.mockRejectedValue(new Error('update note failed'));
-    await updateNotesHandler(mockRequest, mockH);
+
+    const mockUpadetNote = jest.spyOn(dbOperations, 'updateDB');
+    mockUpadetNote.mockRejectedValue(new Error('update note failed'));
+    await changeStateHandler(mockRequest, mockH);
     expect(mockH.response).toHaveBeenCalledWith('update note failed');
     expect(mockCode).toHaveBeenCalledWith(500);
-    mockWriteJSON.mockRestore();
-    mockReadJSON.mockRestore();
+    mockUpadetNote.mockRestore();
   });
 });
 
@@ -206,30 +178,22 @@ describe('the delete handler function', () => {
       params: {
         id: '99961628-6e61-4d74-868f-c932d5730f3c',
       },
-    };
-    const mockJsonResponse = {
-      notes: [
-        {
-          title: 'ANDROID',
-          description: 'ANDROID is too slow',
-          id: '99961628-6e61-4d74-868f-c932d5730f3c',
-          isActive: true,
-        },
-      ],
+      server:
+      {
+        sequelize: {},
+      },
     };
 
-    const mockReadJSON = jest.spyOn(jsonOperations, 'readJSON');
-    mockReadJSON.mockResolvedValue(mockJsonResponse);
-    const mockWriteJSON = jest.spyOn(jsonOperations, 'writeJSON');
-    mockWriteJSON.mockResolvedValue();
+    const mockDeleteNote = jest.spyOn(dbOperations, 'deleteNote');
+    mockDeleteNote.mockResolvedValue([[], [1]]);
     await deleteNotesHandler(mockRequest, mockH);
     expect(mockH.response).toHaveBeenCalledWith(`Deleted note with id=${mockRequest.params.id}`);
     expect(mockCode).toHaveBeenCalledWith(200);
-    mockWriteJSON.mockRestore();
-    mockReadJSON.mockRestore();
+    mockDeleteNote.mockRestore();
   });
 
-  it('should call the h.response with error message when the note to be deleted is not present in the db', async () => {
+
+  it('should call the h.response with error message when the note id to deleted is not presenet in the db', async () => {
     const mockCode = jest.fn();
     const mockH = {
       response: jest.fn(() => ({
@@ -240,26 +204,18 @@ describe('the delete handler function', () => {
       params: {
         id: '6f432a27-7772-4697-ae0f-426a4bb50ae6',
       },
-    };
-    const mockJsonResponse = {
-      notes: [
-        {
-          title: 'ANDROID',
-          description: 'ANDROID is too slow',
-          id: '99961628-6e61-4d74-868f-c932d5730f3c',
-          isActive: true,
-        },
-      ],
+      server:
+      {
+        sequelize: {},
+      },
     };
 
-    const mockReadJSON = jest.spyOn(jsonOperations, 'readJSON');
-    mockReadJSON.mockResolvedValue(mockJsonResponse);
-    const mockWriteJSON = jest.spyOn(jsonOperations, 'writeJSON');
-    mockWriteJSON.mockResolvedValue();
+
+    const deleteNote = jest.spyOn(dbOperations, 'deleteNote');
+    deleteNote.mockResolvedValue([[], 0]);
     await deleteNotesHandler(mockRequest, mockH);
-    expect(mockH.response).toHaveBeenCalledWith(`${mockRequest.params.id} not found`);
-    expect(mockCode).toHaveBeenCalledWith(204);
-    mockWriteJSON.mockRestore();
-    mockReadJSON.mockRestore();
+    expect(mockH.response).toHaveBeenCalledWith(`${mockRequest.params.id} note not found`);
+    expect(mockCode).toHaveBeenCalledWith(400);
+    deleteNote.mockRestore();
   });
 });

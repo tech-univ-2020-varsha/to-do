@@ -1,5 +1,5 @@
 const {
-  getNotesHandler, postNotesHandler, updateNotesHandler, deleteNotesHandler,
+  getNotesHandler, postNotesHandler, changeStateHandler, deleteNotesHandler,
 } = require('../handler/todoHandler');
 const { postNoteSchema, updateNoteSchema, deleteNoteSchema } = require('../schemas/todoSchema');
 
@@ -21,9 +21,9 @@ const todoRoutes = [
     path: '/notes/{id}',
     method: 'PUT',
     config: {
-      handler: updateNotesHandler,
+      handler: changeStateHandler,
       validate: {
-        payload: updateNoteSchema,
+        params: updateNoteSchema,
       },
     },
   },

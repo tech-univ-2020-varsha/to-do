@@ -6,8 +6,7 @@ const postNoteSchema = JOI.object().keys({
 });
 
 const updateNoteSchema = JOI.object().keys({
-  title: JOI.string().required(),
-  description: JOI.string().required(),
+  id: JOI.string().guid().required(),
 });
 
 const deleteNoteSchema = JOI.object({

@@ -1,5 +1,9 @@
-const { server } = require('./server');
 
-server.start();
+const { configServer } = require('./server');
 
-console.log('server started');
+
+const getServer = async () => {
+  const server = await configServer();
+  server.start();
+};
+getServer();
