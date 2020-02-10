@@ -1,0 +1,23 @@
+{
+  "development": {
+    "username": "Varsha_C_L",
+    "password": null,
+    "database": "notes",
+    "host": "localhost",
+    "dialect": "postgres"
+  },
+  "test": {
+    "username": "Varsha_C_L",
+    "password": null,
+    "database": "notes",
+    "host": "localhost",
+    "dialect": "postgres"
+  },
+  "production": {
+    "username": "Varsha_C_L",
+    "password": null,
+    "database": "notes",
+    "host": "localhost",
+    "dialect": "postgres"
+  }
+}

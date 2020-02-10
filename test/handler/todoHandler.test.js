@@ -18,12 +18,8 @@ describe('the get handler function', () => {
     const mockH = {
       response: jest.fn(() => ({ code: mockCode })),
     };
-    const mockRequest = {
-      server: {
-        sequelize: {},
-      },
-    };
-    await getNotesHandler(mockRequest, mockH);
+
+    await getNotesHandler(null, mockH);
     expect(mockH.response).toHaveBeenCalledWith(mockJsonResponse);
     expect(mockCode).toHaveBeenCalledWith(200);
     mockReadJSON.mockRestore();
@@ -37,12 +33,8 @@ describe('the get handler function', () => {
     const mockH = {
       response: jest.fn(() => ({ code: mockCode })),
     };
-    const mockRequest = {
-      server: {
-        sequelize: {},
-      },
-    };
-    await getNotesHandler(mockRequest, mockH);
+
+    await getNotesHandler(null, mockH);
     expect(mockH.response).toHaveBeenCalledWith('Read file failed');
     expect(mockCode).toHaveBeenCalledWith(500);
     mockReadJSON.mockRestore();
@@ -55,10 +47,6 @@ describe('the post handler function', () => {
       payload: {
         title: 'new note',
         description: 'describe note',
-      },
-      server:
-      {
-        sequelize: {},
       },
     };
 
@@ -85,10 +73,7 @@ describe('the post handler function', () => {
         title: 'new note',
         description: 'describe note',
       },
-      server:
-      {
-        sequelize: {},
-      },
+
     };
 
     const mockCode = jest.fn();
@@ -114,10 +99,7 @@ describe('the change state handler function', () => {
       params: {
         id: '69bdeb20-596e-4abd-985b-82dff67696f6',
       },
-      server:
-      {
-        sequelize: {},
-      },
+
     };
 
     const mockCode = jest.fn();
@@ -144,10 +126,7 @@ describe('the change state handler function', () => {
         title: 'new note',
         description: 'describe note',
       },
-      server:
-      {
-        sequelize: {},
-      },
+
     };
 
     const mockCode = jest.fn();
@@ -178,10 +157,7 @@ describe('the delete handler function', () => {
       params: {
         id: '99961628-6e61-4d74-868f-c932d5730f3c',
       },
-      server:
-      {
-        sequelize: {},
-      },
+
     };
 
     const mockDeleteNote = jest.spyOn(dbOperations, 'deleteNote');
@@ -204,10 +180,7 @@ describe('the delete handler function', () => {
       params: {
         id: '6f432a27-7772-4697-ae0f-426a4bb50ae6',
       },
-      server:
-      {
-        sequelize: {},
-      },
+
     };
 
 

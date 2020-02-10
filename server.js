@@ -11,7 +11,6 @@ const server = hapi.Server({
 server.route(todoRoutes.concat(quoteRoutes));
 const configServer = async () => {
   await server.validator(Joi);
-
   await server.register(dbPlugin);
   return server;
 };
