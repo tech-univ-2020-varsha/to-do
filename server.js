@@ -7,6 +7,9 @@ const dbPlugin = require('./src/plugins/db');
 const server = hapi.Server({
   host: 'localhost',
   port: 8080,
+  routes: {
+    cors: true,
+  },
 });
 server.route(todoRoutes.concat(quoteRoutes));
 const configServer = async () => {

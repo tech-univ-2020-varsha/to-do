@@ -13,12 +13,10 @@ const getNotesHandler = async (request, h) => {
 const postNotesHandler = async (request, h) => {
   try {
     const note = request.payload;
-
     note.id = uuid();
     note.isactive = true;
-
-    await dbOperations.writeDB(note);
-    return h.response('New Notes added').code(200);
+    const result = await dbOperations.writeDB(note);
+    return h.response(result.dataValues).code(200);
   } catch (err) {
     return h.response(err.message).code(500);
   }

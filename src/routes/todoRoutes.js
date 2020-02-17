@@ -12,9 +12,9 @@ const todoRoutes = [
     method: 'POST',
     config: {
       handler: postNotesHandler,
-      validate: {
-        payload: postNoteSchema,
-      },
+      // validate: {
+      //   payload: postNoteSchema,
+      // },
     },
   },
   {
