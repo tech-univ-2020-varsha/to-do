@@ -7,10 +7,15 @@ jobs:
    runs-on: ubuntu-latest
    steps:
       - run: echo "job1"
+   name: ProduceVar
   job2:
     runs-on: ubuntu-latest
+    dependsOn: job1
+    variables:
+      # map the output variable from A into this job
+      varFromA: $[ dependencies.A.outputs['ProduceVar.MyVar'] ]
     steps:
-      - run: echo "job2"
+      - run: echo $(varFromA) 
   job3:
     runs-on: ubuntu-latest
     steps:
