@@ -7,6 +7,6 @@ describe('the server function', () => {
       url: '/quotes',
     };
     const response = await server.inject(getNotesObj);
-    expect(response.statusCode).toBe(200);
+    expect(response.statusCode).toBe(300);
   });
 });
