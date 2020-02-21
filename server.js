@@ -5,7 +5,7 @@ const quoteRoutes = require('./src/routes/quoteRoutes');
 const dbPlugin = require('./src/plugins/db');
 
 const server = hapi.Server({
-  host: 'localhost',
+  host: '0.0.0.0',
   port: 8080,
   routes: {
     cors: true,
@@ -14,7 +14,7 @@ const server = hapi.Server({
 server.route(todoRoutes.concat(quoteRoutes));
 const configServer = async () => {
   await server.validator(Joi);
-  await server.register(dbPlugin);
+  //await server.register(dbPlugin);
   return server;
 };
 

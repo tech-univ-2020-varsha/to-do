@@ -4,7 +4,9 @@
   "description": "a to-do notes application",
   "main": "index.js",
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "migrate": "sequelize db:migrate",
+    "start": "node index.js"
   },
   "repository": {
     "type": "git",
@@ -21,19 +23,18 @@
     "eslint-config-airbnb-base": "^14.0.0",
     "eslint-plugin-import": "^2.20.0",
     "jest": "^25.1.0",
-    "sequelize-mock": "^0.10.2"
+    "sequelize-mock": "^0.10.2",
+    "sequelize-cli": "^5.5.1"
   },
   "dependencies": {
     "@hapi/hapi": "^19.0.5",
     "@hapi/joi": "^17.1.0",
     "axios": "^0.19.2",
-    "hapi-sequelizejs": "^3.1.0",
-    "pg": "^7.17.1",
+    "pg": "^7.18.1",
     "pg-hstore": "^2.3.3",
     "pkg": "^4.4.2",
     "promise-fs": "^2.1.1",
     "sequelize": "^5.21.3",
-    "sequelize-cli": "^2.8.0",
     "uuid": "^3.4.0"
   }
 }
