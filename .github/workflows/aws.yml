@@ -26,9 +26,9 @@
 
 on: [push]
   
-  name: Deploy to Amazon ECS
+name: Deploy to Amazon ECS
 
-  jobs:
+jobs:
     deploy:
       name: Deploy
       runs-on: ubuntu-latest
