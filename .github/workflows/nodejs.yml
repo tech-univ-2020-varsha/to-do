@@ -2,15 +2,37 @@ name: Node.js CI
 
 on: [push]
 
-jobs:
-  - job: A
-    steps:
-    - task: MyTask@1  # this step generates the output variable
-      name: ProduceVar  # because we're going to depend on it, we need to name the step
-  - job: B
-    dependsOn: A
+jobs:   
+  job2:
+    runs-on: ubuntu-latest
+    dependsOn: job1
     variables:
       # map the output variable from A into this job
-      varFromA: $[ dependencies.A.outputs['ProduceVar.MyVar'] ]
+      varFromA: $[ dependencies.job1.outputs['ProduceVar.MyVar'] ]
     steps:
-    - script: echo $(varFromA) # this step uses the mapped-in variable
+      - run: export foo=bar
+      - run: echo foo
+  job3:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "job3"
+    needs: [job1, job2]
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [12.x]
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+    - run: npm install
+    - run: npm test
+    - run: echo "df"
+      if: always()
+      env:
+        CI: true
