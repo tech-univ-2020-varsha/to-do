@@ -6,14 +6,14 @@ jobs:
   job1:
    runs-on: ubuntu-latest
    steps:
-      - run: echo "job1"
+    - task: MyTask@1
    name: ProduceVar
   job2:
     runs-on: ubuntu-latest
     dependsOn: job1
     variables:
       # map the output variable from A into this job
-      varFromA: $[ dependencies.A.outputs['ProduceVar.MyVar'] ]
+      varFromA: $[ dependencies.job1.outputs['ProduceVar.MyVar'] ]
     steps:
       - run: echo $(varFromA) 
   job3:
