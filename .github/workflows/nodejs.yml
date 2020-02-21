@@ -8,7 +8,7 @@ jobs:
    steps:
      # this step generates the output variable
       name: ProduceVar  # because we're going to depend on it, we need to name the step
-      - run: echo $(ProduceVar.MyVar) # this step uses the output variable
+    - run: echo $(ProduceVar.MyVar) # this step uses the output variable
    
   job2:
     runs-on: ubuntu-latest
