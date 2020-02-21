@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - run: echo "job3"
-    needs: [job1, job2]
+      
   build:
     runs-on: ubuntu-latest
 
