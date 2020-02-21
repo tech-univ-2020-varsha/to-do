@@ -5,6 +5,7 @@ const getQuotesHandler = async (request, h) => {
     const quoteURL = 'http://api.quotable.io/random';
     const quote = await axios.get(quoteURL);
     const quoteData = quote.data;
+    console.log('change');
     if (!quoteData || (!quoteData.content) || (!quoteData.author)) {
       return h.response('No data found').code(204);
     }
