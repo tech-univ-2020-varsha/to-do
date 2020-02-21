@@ -3,8 +3,18 @@ name: Node.js CI
 on: [push]
 
 jobs:
+  job1:
+   steps:
+      - run: echo "job1"
+  job2:
+    steps:
+      - run: echo "job2"
+    needs: job1
+  job3:
+    steps:
+      - run: echo "job3"
+    needs: [job1, job2]
   build:
-
     runs-on: ubuntu-latest
 
     strategy:
