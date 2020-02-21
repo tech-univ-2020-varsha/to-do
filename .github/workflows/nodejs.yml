@@ -5,9 +5,6 @@ on: [push]
 jobs:   
   job2:
     runs-on: ubuntu-latest
-    variables:
-      # map the output variable from A into this job
-      varFromA: $[ dependencies.job1.outputs['ProduceVar.MyVar'] ]
     steps:
       - run: export foo=bar
       - run: echo foo
