@@ -1,7 +1,7 @@
 on:
   push:
     branches:
-      - seqCLI
+      - ORM
 name: Deploy to Amazon ECS
 jobs:
   deploy:
